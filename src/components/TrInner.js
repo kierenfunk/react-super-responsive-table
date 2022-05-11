@@ -16,8 +16,16 @@ class TrInner extends React.Component {
     }
   }
 
+
   render() {
     const { children } = this.props;
+
+    const modColumnKeys = [0]
+    const childrenMod = React.Children.map(children, (child,i)=>{
+      const spanLen = child.props.hasOwnProperty('colSpan')? Number(child.props.colSpan) : 1
+      modColumnKeys.push(spanLen+modColumnKeys[modColumnKeys.length-1])
+    })
+
     return (
       <tr data-testid="tr" {...allowed(this.props)}>
         {children &&
@@ -28,7 +36,7 @@ class TrInner extends React.Component {
               React.cloneElement(child, {
                 // eslint-disable-next-line react/no-array-index-key
                 key: i,
-                columnKey: i,
+                columnKey: modColumnKeys[i],
               })
           )}
       </tr>
